@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071426">
+<meta name="description" content="A live countdown-style clock measuring how long it has been since the Dallas Cowboys last won a Super Bowl.">
+<title>Still Waiting | The Cowboys Super Bowl Clock</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap');
+:root{--navy:#071426;--navy2:#0d2038;--blue:#123d70;--silver:#b9c4d1;--ice:#e8eef5;--muted:#8e9bad;--line:rgba(205,218,232,.16);--white:#f8fafc}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--navy);color:var(--white);font-family:Inter,Arial,sans-serif}
+a{color:inherit;text-decoration:none}
+.topline{height:5px;background:linear-gradient(90deg,#53677f,#e2e8ef 48%,#53677f)}
+header{height:82px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(6vw,24px);background:rgba(5,17,32,.92)}
+.brand{display:flex;align-items:center;gap:13px;font-weight:800;letter-spacing:2px;font-size:13px}
+.brand-star{width:42px;height:42px;display:grid;place-items:center;border:1px solid #aebdce;border-radius:50%;color:#dce5ef;font-size:25px;box-shadow:0 0 22px rgba(174,189,206,.13)}
+nav{display:flex;gap:30px;color:#aab7c7;font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase}
+nav a:hover{color:#fff}
+.header-tag{font-size:10px;letter-spacing:2px;color:#cbd5e1;border:1px solid var(--line);padding:10px 13px;border-radius:2px}
+.hero{position:relative;overflow:hidden;min-height:710px;display:flex;align-items:center;justify-content:center;text-align:center;padding:90px 22px 85px;background:
+radial-gradient(ellipse at 50% 76%,rgba(36,78,125,.43),transparent 48%),
+linear-gradient(180deg,rgba(5,17,32,.18),#071426 96%),
+repeating-linear-gradient(115deg,transparent 0 95px,rgba(255,255,255,.018) 96px 97px)}
+.hero:before{content:"";position:absolute;inset:auto -10% 0;height:210px;opacity:.35;background:repeating-linear-gradient(90deg,transparent 0 38px,rgba(190,205,221,.17) 39px 41px),linear-gradient(0deg,#0b1e34,transparent);clip-path:polygon(0 40%,7% 40%,7% 22%,13% 22%,13% 34%,19% 34%,19% 12%,26% 12%,26% 39%,33% 39%,33% 0,40% 0,40% 30%,47% 30%,47% 15%,54% 15%,54% 40%,61% 40%,61% 8%,68% 8%,68% 32%,75% 32%,75% 18%,82% 18%,82% 40%,90% 40%,90% 25%,100% 25%,100% 100%,0 100%)}
+.hero-inner{position:relative;z-index:1;width:min(1050px,100%)}
+.eyebrow{display:flex;align-items:center;justify-content:center;gap:13px;color:#b8c6d6;font-size:11px;font-weight:800;letter-spacing:4px;text-transform:uppercase}
+.eyebrow:before,.eyebrow:after{content:"";width:42px;height:1px;background:#71849b}
+h1{font-family:"Barlow Condensed",Impact,sans-serif;font-size:clamp(58px,10vw,118px);line-height:.88;letter-spacing:1px;text-transform:uppercase;margin:27px 0 15px;font-weight:900}
+h1 span{display:block;color:#c4cfdb}
+.lede{color:#aebdce;font-size:15px;letter-spacing:.4px;margin:0 auto 43px;max-width:600px;line-height:1.7}
+.counter-wrap{background:linear-gradient(145deg,rgba(19,44,73,.88),rgba(5,17,32,.94));border:1px solid rgba(195,210,226,.27);box-shadow:0 25px 75px rgba(0,0,0,.35);padding:30px 26px 24px;max-width:950px;margin:auto;position:relative}
+.counter-wrap:before{content:"";position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:110px;height:2px;background:#d2dce7}
+.counter-label{color:#aebdce;font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;margin-bottom:24px}
+.counter{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.unit{min-width:0;padding:10px 4px}
+.value{font-family:"Barlow Condensed",Impact,sans-serif;font-size:clamp(43px,7vw,76px);font-weight:800;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:1px;text-shadow:0 4px 20px rgba(0,0,0,.2)}
+.unit-label{color:#91a2b6;font-size:10px;letter-spacing:2px;font-weight:800;text-transform:uppercase;margin-top:10px}
+.anchor{border-top:1px solid var(--line);margin-top:25px;padding-top:18px;color:#8495a9;font-size:11px;letter-spacing:.6px}
+.anchor strong{color:#dce5ee;font-weight:600}
+.live{display:inline-flex;align-items:center;gap:8px;margin-top:27px;color:#9eb0c4;font-size:10px;letter-spacing:2px;text-transform:uppercase}
+.dot{width:7px;height:7px;border-radius:50%;background:#73c69a;box-shadow:0 0 12px #73c69a}
+.section{padding:90px max(7vw,24px);background:#f0f3f7;color:#101d2d}
+.section-inner{max-width:1080px;margin:auto}
+.section-kicker{font-size:10px;font-weight:800;letter-spacing:3px;color:#58718d;text-transform:uppercase}
+.section h2{font-family:"Barlow Condensed",Impact,sans-serif;font-size:clamp(40px,6vw,65px);line-height:.98;text-transform:uppercase;margin:14px 0 35px;color:#0a1c32}
+.history-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:55px;align-items:center}
+.score-card{background:#091a30;color:#f8fafc;padding:30px;box-shadow:0 18px 45px rgba(8,24,43,.14)}
+.score-top{font-size:10px;color:#9eafc2;letter-spacing:2px;font-weight:800;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.15);padding-bottom:17px;margin-bottom:18px}
+.teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;text-align:center}
+.team{font-weight:800;font-size:12px;letter-spacing:1px}
+.score{font-family:"Barlow Condensed",Impact,sans-serif;font-size:62px;font-weight:800;line-height:1.1}
+.vs{color:#8294a9;font-size:10px;letter-spacing:2px}
+.score-foot{color:#9eafc2;text-align:center;font-size:11px;margin-top:20px;letter-spacing:.7px}
+.copy p{color:#506176;line-height:1.8;font-size:14px;margin:0 0 15px}
+.copy strong{color:#10243b}
+.note{margin-top:22px;border-left:3px solid #8b9db1;padding:3px 0 3px 15px;color:#66778b;font-size:12px;line-height:1.7}
+footer{padding:28px 7vw;background:#050f1d;color:#77889d;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:10px;letter-spacing:1px;text-transform:uppercase}
+footer strong{color:#cbd5e1}
+@media(max-width:700px){header{height:70px}nav{display:none}.header-tag{font-size:9px}.hero{min-height:650px;padding-top:65px}.counter-wrap{padding:24px 12px 19px}.counter{grid-template-columns:repeat(3,1fr);row-gap:20px}.unit:nth-child(4){grid-column:1/2}.unit:nth-child(5){grid-column:2/4}.value{font-size:58px}.history-grid{grid-template-columns:1fr;gap:30px}.section{padding-top:65px;padding-bottom:65px}footer{justify-content:center;text-align:center}}
+@media(prefers-reduced-motion:no-preference){.hero-inner{animation:rise .9s ease-out both}@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}}
+</style>
+</head>
+<body>
+<div class="topline"></div>
+<header>
+  <a class="brand" href="#" aria-label="Still Waiting home"><span class="brand-star">★</span><span>STILL WAITING</span></a>
+  <nav><a href="#clock">The Clock</a><a href="#history">The Last One</a></nav>
+  <div class="header-tag">EST. JAN 28, 1996</div>
+</header>
+
+<main>
+<section class="hero" id="clock">
+  <div class="hero-inner">
+    <div class="eyebrow">A Dallas Cowboys timepiece</div>
+    <h1>Still <span>Waiting.</span></h1>
+    <p class="lede">A second-by-second reminder of the time since Dallas last stood atop the football world.</p>
+    <div class="counter-wrap">
+      <div class="counter-label">Time since the last Cowboys Super Bowl victory</div>
+      <div class="counter" aria-live="off">
+        <div class="unit"><div class="value" id="years">00</div><div class="unit-label">Years</div></div>
+        <div class="unit"><div class="value" id="days">000</div><div class="unit-label">Days</div></div>
+        <div class="unit"><div class="value" id="hours">00</div><div class="unit-label">Hours</div></div>
+        <div class="unit"><div class="value" id="minutes">00</div><div class="unit-label">Minutes</div></div>
+        <div class="unit"><div class="value" id="seconds">00</div><div class="unit-label">Seconds</div></div>
+      </div>
+      <div class="anchor">Counting from <strong>January 28, 1996 at approximately 8:25 PM CST</strong></div>
+    </div>
+    <div class="live"><span class="dot"></span> THE CLOCK IS RUNNING</div>
+  </div>
+</section>
+
+<section class="section" id="history">
+  <div class="section-inner">
+    <div class="section-kicker">The last time it happened</div>
+    <h2>One more for the history books.</h2>
+    <div class="history-grid">
+      <div class="copy">
+        <p><strong>Super Bowl XXX.</strong> On January 28, 1996, the Dallas Cowboys defeated the Pittsburgh Steelers to claim their fifth Super Bowl championship.</p>
+        <p>That night in Tempe, Arizona remains the most recent time Dallas finished a season as world champions. The clock above has been counting ever since.</p>
+        <div class="note">The start time is an approximate historical anchor supplied for this counter. The live clock measures elapsed time from that fixed timestamp.</div>
+      </div>
+      <div class="score-card">
+        <div class="score-top">Super Bowl XXX · Sun Devil Stadium · Tempe, Arizona</div>
+        <div class="teams">
+          <div><div class="team">DALLAS</div><div class="score">27</div></div>
+          <div class="vs">FINAL</div>
+          <div><div class="team">PITTSBURGH</div><div class="score">17</div></div>
+        </div>
+        <div class="score-foot">JANUARY 28, 1996</div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer><span><strong>STILL WAITING</strong> · A fan-made clock</span><span>Not affiliated with the Dallas Cowboys or the NFL</span></footer>
+
+<script>
+const start = new Date("1996-01-29T02:25:00Z"); // Jan 28, 1996, 8:25 PM CST (UTC−6)
+const $ = id => document.getElementById(id);
+function updateClock(){
+  const now = new Date();
+  let years = now.getUTCFullYear() - start.getUTCFullYear();
+  const anniversary = n => new Date(Date.UTC(
+    start.getUTCFullYear()+n, start.getUTCMonth(), start.getUTCDate(),
+    start.getUTCHours(), start.getUTCMinutes(), start.getUTCSeconds()
+  ));
+  if(anniversary(years) > now) years--;
+  let ms = Math.max(0, now - anniversary(years));
+  const days = Math.floor(ms / 86400000); ms %= 86400000;
+  const hours = Math.floor(ms / 3600000); ms %= 3600000;
+  const minutes = Math.floor(ms / 60000); ms %= 60000;
+  const seconds = Math.floor(ms / 1000);
+  $("years").textContent = String(years).padStart(2,"0");
+  $("days").textContent = String(days).padStart(3,"0");
+  $("hours").textContent = String(hours).padStart(2,"0");
+  $("minutes").textContent = String(minutes).padStart(2,"0");
+  $("seconds").textContent = String(seconds).padStart(2,"0");
+}
+updateClock(); setInterval(updateClock,1000);
+</script>
+</body>
+</html>
